@@ -1,0 +1,357 @@
+/*fonts import proxima nova*/
+  @font-face{
+        font-family:"Proxima Nova W05 Bold";
+        src:url("Fonts/5159350/639d89ac-8d8e-4232-b27f-f4735eda0105.eot?#iefix");
+        src:url("Fonts/5159350/639d89ac-8d8e-4232-b27f-f4735eda0105.eot?#iefix") format("eot"),url("Fonts/5159350/f4d03798-d7ba-4405-8daf-dd4e7a1ab344.woff2") format("woff2"),url("Fonts/5159350/63b0cd75-f526-4455-80a5-16ab81d13030.woff") format("woff"),url("Fonts/5159350/bb9e0e1d-ec6a-4a75-b579-76f0caa10246.ttf") format("truetype");
+    }
+    @font-face{
+        font-family:"Proxima Nova W05 Regular";
+        src:url("Fonts/5167714/dfa333df-162e-4609-a692-358227aef2cc.eot?#iefix");
+        src:url("Fonts/5167714/dfa333df-162e-4609-a692-358227aef2cc.eot?#iefix") format("eot"),url("Fonts/5167714/f4c62c5f-7708-47a4-bf4f-41c9cf22dd73.woff2") format("woff2"),url("Fonts/5167714/a747037a-e23b-49a6-a8db-f6f63e3c4a78.woff") format("woff"),url("Fonts/5167714/a15cb6e9-f50e-4463-bc70-0e7572033cc0.ttf") format("truetype");
+    }
+    @font-face{
+        font-family:"Proxima Nova W05 Light";
+        src:url("Fonts/5192776/0db8e172-4b80-4daf-bee8-77da6cc27ba1.eot?#iefix");
+        src:url("Fonts/5192776/0db8e172-4b80-4daf-bee8-77da6cc27ba1.eot?#iefix") format("eot"),url("Fonts/5192776/e475e280-2bf1-493e-8a8f-711449525adb.woff2") format("woff2"),url("Fonts/5192776/2966af80-db37-4765-842f-ac62573c1a56.woff") format("woff"),url("Fonts/5192776/68576acf-7469-46d0-8a7d-e31723fc18e0.ttf") format("truetype");
+    }
+    @font-face{
+        font-family:"Proxima Nova W05 Semibold";
+        src:url("Fonts/5336197/f2c17c4e-0df4-4227-9b81-f867288bff41.eot?#iefix");
+        src:url("Fonts/5336197/f2c17c4e-0df4-4227-9b81-f867288bff41.eot?#iefix") format("eot"),url("Fonts/5336197/3ac241c9-a224-4e42-bfe2-f79949b0b0d1.woff2") format("woff2"),url("Fonts/5336197/7f01cc93-cfa0-46c2-b30a-82f618cbd876.woff") format("woff"),url("Fonts/5336197/d612d3cc-3988-4bf3-bc8c-55d4a6c82170.ttf") format("truetype");
+    }
+    @font-face{
+        font-family:"Proxima Nova W05 Black";
+        src:url("Fonts/5339422/3ea80c08-e97a-46d2-a9f1-41f250117801.eot?#iefix");
+        src:url("Fonts/5339422/3ea80c08-e97a-46d2-a9f1-41f250117801.eot?#iefix") format("eot"),url("Fonts/5339422/bc858d74-8f33-4d46-a951-5c7371d3cb21.woff2") format("woff2"),url("Fonts/5339422/b0dbef4b-d2bd-457c-a487-11e702acb014.woff") format("woff"),url("Fonts/5339422/e2d9d2f1-fc81-4ebb-876e-db65b9e71715.ttf") format("truetype");
+    }
+
+
+
+/*login screen*/
+
+body{background:transparent;}
+
+.btn{
+	font-family: "Proxima Nova W05 Bold";
+font-size: 24px;
+border-radius: 40px;
+}
+
+.width{
+	width:1920px;
+}
+
+.btn.white-outline{
+position: absolute;
+top: 720px;
+text-align: center;
+color: #fff;
+
+border: 2px #fff solid;
+
+padding: 20px 40px;
+left: 370px;
+}
+
+.form-signin{
+    position: absolute;
+    top: 460px;
+    left: 230px;
+}
+
+
+.polleoform{
+	width:520px;
+	margin-bottom:10px;
+	background-color:#f3f3f3;
+	border-radius:0px;
+	border:none;
+	
+
+}
+
+.polleoform:focus {
+    margin-bottom:10px;
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    border-left:5px #00acfa solid;
+    box-shadow: none;
+}
+
+.btn.blue-full{
+
+
+text-align: center;
+background-color: #00acfa;
+
+color: #fff;
+
+border: 2px #00acfa solid;
+
+padding: 20px 40px;
+left: 370px;
+margin-top: 30px;
+}
+
+.form-control-lg {
+    height: calc(1.5em + 3rem + 2px);
+
+}
+
+
+/*login screen 1 */
+.btn.blue-full-1{
+
+position: absolute;
+top: 860px;
+text-align: center;
+background-color: #00acfa;
+color: #fff;
+border: 2px #00acfa solid;
+padding: 20px 40px;
+left: 200px;
+margin-top: 30px;
+}
+.datum, .bodovi{
+position: absolute;
+color:#fff;
+}
+
+.datum{
+top: 120px;
+left: 270px;
+}
+
+.bodovi{
+top: 430px;
+font-size: 120px;
+left: 235px;
+}
+
+.anketa{
+position: absolute;
+top:180px;
+text-align:center;
+width:640px;
+}
+
+.anketa h3{
+color: #00acfa;
+font-family: "Proxima Nova W05 Bold";
+}
+
+
+/*start rating login*/
+
+
+.starrating > input {display: none;}  /* Remove radio buttons */
+
+.starrating > label:before { 
+  content: "\f005"; /* Star */
+  margin: 2px;
+  font-size: 5em;
+  font-family: FontAwesome;
+  display: inline-block; 
+
+}
+
+.starrating > label
+{
+  color: #a3e2ff; /* Start color when not clicked */
+
+}
+
+.starrating > input:checked ~ label
+{ color: #00acfa ; } /* Set yellow color when star checked */
+
+.starrating > input:hover ~ label
+{ color: #00acfa ;  } /* Set yellow color when star hover */
+
+
+
+.btn.blue-ocijeni{
+
+position: absolute;
+top: 690px;
+text-align: center;
+background-color: #00acfa;
+color: #fff;
+border: 2px #00acfa solid;
+padding: 20px 40px;
+left: 200px;
+margin-top: 30px;
+}
+.btn.blue-poslano{
+
+position: absolute;
+top: 690px;
+text-align: center;
+background-color: #8fd139;
+color: #fff;
+border: 2px #8fd139 solid;
+padding: 20px 40px;
+left: 200px;
+margin-top: 30px;
+}
+
+.btn.blue-ocijeni.disabled,
+.btn.blue-ocijeni[disabled]{
+
+position: absolute;
+top: 690px;
+text-align: center;
+background-color: #bebebe;
+color: #fff;
+border: 2px #bebebe solid;
+padding: 20px 40px;
+left: 200px;
+margin-top: 30px;
+}
+/*signup screen*/
+
+.form-signup{
+    position: absolute;
+    top: 60px;
+    left: 560px;
+}
+
+.form-signup .polleoform{
+    width:100%;
+    margin-bottom:30px;
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    
+
+}
+
+.form-signup .polleoform:focus {
+  
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    border-left:5px #00acfa solid;
+    box-shadow: none;
+}
+.form-signup label {
+
+    color: #6c757d;
+    font-size: 1.25rem;
+
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+
+    color: #0da0ff;
+    border-color: #0ca2ff;
+    background-color: #0ca2ff;
+
+}
+.custom-control-label::before {
+
+    position: absolute;
+    top: .15rem;
+    left: -2.5rem;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    pointer-events: none;
+    content: "";
+    background-color: #fff;
+    border: #adb5bd solid 1px;
+        border-top-color: rgb(173, 181, 189);
+        border-right-color: rgb(173, 181, 189);
+        border-bottom-color: rgb(173, 181, 189);
+        border-left-color: rgb(173, 181, 189);
+
+}
+
+.custom-control-label::after {
+
+    position: absolute;
+    top: .15rem;
+    left: -2.5rem;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    content: "";
+    background: no-repeat 50%/50% 50%;
+        background-image: none;
+
+}
+
+.custom-control-inline {
+
+
+    margin-right: 3rem;
+    margin-top: 25px;
+
+}
+
+.form-signup .polleoformmobile{
+    width:460px;
+    margin-bottom:30px;
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    
+
+}
+
+.form-signup .polleoformmobile:focus {
+  
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    border-left:5px #00acfa solid;
+    box-shadow: none;
+}
+
+.form-signup .btn-mobile{
+
+
+background-color: #fff;
+color: #00acfa;
+border: 2px #00acfa solid;
+padding: 23px 20px;
+
+margin-bottom: 30px;
+display: inline-block;
+font-size: 1.25rem;
+}
+
+p.blue{
+    color:#00acfa;
+    margin-top:-15px;
+}
+.fright{
+    float:right;
+}
+.mr-40{margin-right:40px;}
+
+/*sign up 2*/
+
+.form-signup2{
+    position: absolute;
+    top: 260px;
+    left: 560px;
+        width:1000px;
+}
+.opstyle{
+   clear:both;
+   display:block;
+  color: #00acfa;
+    font-size: 1.5rem;
+    font-family: "Proxima Nova W05 Bold";
+}
+
+.form-signup2 .polleoform{
+
+    margin-bottom:30px;
+    background-color:#f3f3f3;
+    border-radius:0px;
+    border:none;
+    
+
+}
+
