@@ -12,7 +12,7 @@
     <div class="col-sm text-center">
   
 
-      <span class="bodovi">{{ $data['currentPoints'] }</span>
+      <span class="bodovi">{{ $data['currentPoints'] }}</span>
 
     </div>
 
@@ -87,7 +87,7 @@
 
 
   <!--old -->
-
+<!--
     <div class="album py-3">
         <div class="row">
             <div class="col-md-8">
@@ -119,10 +119,10 @@
 
     <hr class="my-4">
 
-    @include('dashboard.requiredModal', ['user' => $user])
-    @include('dashboard.optionalModal', ['user' => $user])
+    //@include('dashboard.requiredModal', ['user' => $user])
+    //@include('dashboard.optionalModal', ['user' => $user])
 
     <div class="row"></div>
 
-
+-->
 @stop

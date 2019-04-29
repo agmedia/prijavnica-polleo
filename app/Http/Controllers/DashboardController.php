@@ -22,7 +22,7 @@ class DashboardController extends Controller
         // Get user from session.
         $user = $request->session()->get('user');
 
-        $backgroundimage = 'images/signup-screen-1.png';
+        $backgroundimage = 'images/login-screen1.png';
 
         if ( ! $user)
             return redirect()->route('enter');
