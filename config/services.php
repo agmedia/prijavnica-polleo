@@ -45,6 +45,14 @@ return [
 
     'loyalty' => [
         'base_url' => 'http://165.227.137.83:9000/api/v1/',
+    ],
+
+    'sms_service' => [
+        'user' => env('SMS_SERVICE_USER'),
+        'pass' => env('SMS_SERVICE_PASS'),
+        'app_id' => env('SMS_SERVICE_APP_ID'),
+        'msg_id' => env('SMS_SERVICE_MESSAGE_ID'),
+        'base_url' => 'https://vrxgm.api.infobip.com/2fa/1/',
     ]
 
 ];

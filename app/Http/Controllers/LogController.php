@@ -142,6 +142,12 @@ class LogController extends Controller
     }
 
 
+    public function checkUserSMS(Request $request)
+    {
+
+    }
+
+
     /**
      * Logout User.
      *

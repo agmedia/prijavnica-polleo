@@ -28,6 +28,14 @@ class Controller extends BaseController
     protected $loyalty_client;
 
     /**
+     * Infobip SMS HTTP/CURL client service.
+     *
+     * @var Client GuzzleHttp
+     */
+    protected $sms_client;
+
+
+    /**
      * Controller constructor.
      */
     public function __construct()
@@ -42,6 +50,10 @@ class Controller extends BaseController
             'base_uri' => config('services.loyalty.base_url'),
             'verify' => false,
             'timeout' => 5.0,
+        ]);
+
+        $this->sms_client = new Client([
+            'base_uri' => config('services.sms_service.base_url'),
         ]);
     }
 }
