@@ -132,6 +132,18 @@ class LogController extends Controller
             if ($l_response['email'] == $user_data['email']) {
                 DB::table('oc_customer')->where('email', $l_response['email'])->update(['reference_id' => $l_response['referenceNumber']]);
             }
+
+            // Verify telephone number by SMS
+            /*try {
+                $sms_response = $this->sms_client->request('POST', 'pin', [
+                    'json' => [
+                        'applicationId' => config('services.sms_service.app_id'),
+                        'messageId' => config('services.sms_service.app_id'),
+                        'from' => 'InfoSMS',
+                        'to' => $user_data['telephone'],
+                    ]
+                ]);
+            }*/
             // add session user
             User::setUserSessionData($p_response['userdata']);
 

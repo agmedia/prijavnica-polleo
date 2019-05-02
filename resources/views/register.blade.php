@@ -55,9 +55,9 @@
                         <div class="form-inline">
 
                             <label for="inputMobitel" class="sr-only">Mobitel</label>
-                            <input type="text"  name="telephone" class="form-control form-control-lg polleoformmobile" placeholder="Mobitel 09X XX XX XXX" value="{{ old('mobile') }}" required>
+                            <input type="text"  name="telephone" class="form-control form-control-lg polleoform" id="telephone" placeholder="Mobitel 09X-XXX-XXXX" value="{{ old('mobile') }}" required>
 
-                            <button id="mobitel" class="btn-mobile" type="submit">Potvrdi broj*</button>
+
                         </div>
                         <p class="blue">*Nakon upisa broja mobitela, isti je potrebno autentificirati upisom potvrdnog koda pristiglog porukom.</p>
 
@@ -77,7 +77,7 @@
                         <input type="text"  name="city" class="form-control form-control-lg polleoform" placeholder="Grad" value="{{ old('city') }}" required>
 
                         <label for="inputMjesto" class="sr-only">Datum rođenja</label>
-                        <input type="date"  name="birthday" class="form-control form-control-lg polleoform" placeholder="Datum rođenja" value="{{ old('birthday') }}" required>
+                        <input type="text"  name="birthday" id="birthday" class="form-control form-control-lg polleoform" placeholder="Datum rođenja mm/dd/yyyy" value="{{ old('birthday') }}" required>
 
                         <div class="custom-control custom-radio custom-control-inline" style="margin-left:-20px">
 
@@ -86,16 +86,17 @@
 
 
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio"  name="sex" class="custom-control-input" value="M" {{ (old('sex') == 'M') ? 'checked' : '' }} >
-                            <label class="custom-control-label" >Muško</label>
+                            <input type="radio"  name="sex" class="custom-control-input" id="M" value="M" {{ (old('sex') == 'M') ? 'checked' : '' }} >
+                            <label class="custom-control-label" for="M">Muško</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="Spol2" name="sex" class="custom-control-input" value="Ž" {{ (old('sex') == 'F') ? 'checked' : '' }}>
-                            <label class="custom-control-label" >Žensko</label>
+                            <input type="radio"  name="sex" class="custom-control-input" id="F" value="F" {{ (old('sex') == 'F') ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="F">Žensko</label>
                         </div>
+
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="Spol3" name="sex" class="custom-control-input" value="O" {{ (old('sex') == 'O') ? 'checked' : '' }}>
-                            <label class="custom-control-label" >Ostalo</label>
+                            <input type="radio"  name="sex" class="custom-control-input" id="O" value="O" {{ (old('sex') == 'O') ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="O" >Ostalo</label>
                         </div>
 
 

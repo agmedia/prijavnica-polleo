@@ -52,6 +52,7 @@ return [
         'pass' => env('SMS_SERVICE_PASS'),
         'app_id' => env('SMS_SERVICE_APP_ID'),
         'msg_id' => env('SMS_SERVICE_MESSAGE_ID'),
+        'header' => 'Basic ' . base64_encode(env('SMS_SERVICE_USER') . ':' . env('SMS_SERVICE_PASS')),
         'base_url' => 'https://vrxgm.api.infobip.com/2fa/1/',
     ]
 
