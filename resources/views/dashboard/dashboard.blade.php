@@ -20,7 +20,7 @@
     <div class="col-sm text-center">
 
 
-        <button class="btn blue-full-1" type="submit">IZRADI KARTICU</button>
+        <button class="btn blue-full-1" type="button" @click="CardOut()">IZRADI KARTICU</button>
 
  
     </div>

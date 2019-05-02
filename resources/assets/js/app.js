@@ -28,6 +28,16 @@ const app = new Vue({
     },
     mounted() {
         setInterval(this.CountDown, 1000)
+
+        // Resets interval on every input focus
+        var inputs = document.getElementsByTagName('input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('focus', function () {
+                _this.timeLeft = 30;
+            });
+        }
+
+        this.socket = new WebSocket(this.host);
     },
     methods: {
         CountDown() {
@@ -39,6 +49,9 @@ const app = new Vue({
                     this.timeLeft--
                 }
             }
+        },
+        CardOut() {
+            this.socket.send('card_out');
         }
     }
 });

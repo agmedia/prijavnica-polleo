@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -134,7 +135,7 @@ class LogController extends Controller
             }
 
             // Verify telephone number by SMS
-            /*try {
+            try {
                 $sms_response = $this->sms_client->request('POST', 'pin', [
                     'json' => [
                         'applicationId' => config('services.sms_service.app_id'),
@@ -142,21 +143,50 @@ class LogController extends Controller
                         'from' => 'InfoSMS',
                         'to' => $user_data['telephone'],
                     ]
-                ]);
-            }*/
+                ])->getBody();
+                $sms_response = json_decode($sms_response, true);
+
+            } catch (RequestException $e) {
+                Log::alert($e->getMessage());
+            }
+
+            $p_response['sms_response'] = $sms_response;
+
             // add session user
             User::setUserSessionData($p_response['userdata']);
 
-            return redirect()->route('dashboard');
+            return redirect()->route('verify-sms');
         }
 
         return back()->with('error', 'Dogodila se greška. Pozovite prodavača!');
     }
 
 
-    public function checkUserSMS(Request $request)
+    public function verifySMS(Request $request)
     {
+        // Get user from session.
+        $user = $request->session()->get('user');
+        // Add some general user data
+        $req_data = $request->all();
 
+        // Verify PIN sent over SMS
+        try {
+            $sms_response = $this->sms_client->request('POST', 'pin/' . $user['sms_response']['pinId'] . '/verify', [
+                'json' => [
+                    'pin' => $req_data['pin'],
+                ]
+            ])->getBody();
+            $sms_response = json_decode($sms_response, true);
+
+        } catch (RequestException $e) {
+            Log::alert($e->getMessage());
+        }
+
+        if ($sms_response['verified']) {
+            return redirect()->route('dashboard');
+        } else {
+            return redirect()->route('verify-sms')->with('error', 'Dogodila se greška. Pozovite prodavača!');
+        }
     }
 
 

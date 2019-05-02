@@ -26,3 +26,4 @@ Route::post('/edit-user-optional-data', 'DashboardController@editUserOptionalDat
 
 Route::post('/log-user', 'LogController@logUser')->name('log-user');
 Route::post('/register-user', 'LogController@registerUser')->name('register-user');
+Route::post('/verify-sms', 'LogController@verifySMS')->name('verify-sms');
