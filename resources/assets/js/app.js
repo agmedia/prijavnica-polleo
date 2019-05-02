@@ -21,13 +21,23 @@ const app = new Vue({
     el: '#app',
     data() {
         return {
-            socket: '',
+            socket: {},
             host: 'ws://localhost:5331/serial',
             timeLeft: 30,
         }
     },
     mounted() {
         setInterval(this.CountDown, 1000)
+
+        // Resets interval on every input focus
+        let inputs = document.getElementsByTagName('input');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('focus', () => {
+                this.timeLeft = 30
+            })
+        }
+
+        this.socket = new WebSocket(this.host)
     },
     methods: {
         CountDown() {
@@ -39,6 +49,10 @@ const app = new Vue({
                     this.timeLeft--
                 }
             }
+        },
+
+        CardOut() {
+            this.socket.send('card_out')
         }
     }
 });

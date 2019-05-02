@@ -14205,13 +14205,25 @@ var app = new Vue({
     el: '#app',
     data: function data() {
         return {
-            socket: '',
+            socket: {},
             host: 'ws://localhost:5331/serial',
-            timeLeft: 60
+            timeLeft: 30
         };
     },
     mounted: function mounted() {
+        var _this = this;
+
         setInterval(this.CountDown, 1000);
+
+        // Resets interval on every input focus
+        var inputs = document.getElementsByTagName('input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('focus', function () {
+                _this.timeLeft = 30;
+            });
+        }
+
+        this.socket = new WebSocket(this.host);
     },
 
     methods: {
@@ -14224,6 +14236,9 @@ var app = new Vue({
                     this.timeLeft--;
                 }
             }
+        },
+        CardOut: function CardOut() {
+            this.socket.send('card_out');
         }
     }
 });
