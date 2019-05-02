@@ -30,10 +30,10 @@ const app = new Vue({
         setInterval(this.CountDown, 1000)
 
         // Resets interval on every input focus
-        var inputs = document.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].addEventListener('focus', function () {
-                _this.timeLeft = 30;
+        let inputs = document.getElementsByTagName('input');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('focus', () => {
+                this.timeLeft = 30
             });
         }
 

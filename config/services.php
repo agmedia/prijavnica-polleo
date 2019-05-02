@@ -50,6 +50,7 @@ return [
     'sms_service' => [
         'user' => env('SMS_SERVICE_USER'),
         'pass' => env('SMS_SERVICE_PASS'),
+        'api_key' => env('SMS_SERVICE_API_KEY'),
         'app_id' => env('SMS_SERVICE_APP_ID'),
         'msg_id' => env('SMS_SERVICE_MESSAGE_ID'),
         'header' => 'Basic ' . base64_encode(env('SMS_SERVICE_USER') . ':' . env('SMS_SERVICE_PASS')),

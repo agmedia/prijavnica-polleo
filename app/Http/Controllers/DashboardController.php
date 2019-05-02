@@ -32,7 +32,8 @@ class DashboardController extends Controller
             $response = $this->loyalty_client->request('POST', 'points', [
                 'json' => [
                     /** @IMPORTANT ovo ne valja. ODAKLE Reference Number */
-                    'referenceNumber' => $user['email'],
+                   // 'referenceNumber' => $user['email'],
+                    'referenceNumber' => $user['reference_id'],
                 ]
             ])->getBody();
             $data = json_decode($response, true);

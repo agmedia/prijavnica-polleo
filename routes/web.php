@@ -18,6 +18,7 @@ Route::get('/enter', 'HomeController@enter')->name('enter');
 Route::get('/login', 'LogController@login')->name('login');
 Route::get('/register', 'LogController@register')->name('register');
 Route::get('/logout', 'LogController@logout')->name('logout');
+Route::get('/verify', 'LogController@verify')->name('verify');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 

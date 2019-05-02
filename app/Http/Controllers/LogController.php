@@ -28,6 +28,14 @@ class LogController extends Controller
 
     }
 
+    public function verify()
+    {
+        $backgroundimage = 'images/signup-screen-1.png';
+
+        return view('verifysms', compact('backgroundimage'));
+
+    }
+
 
     /**
      * Try to log user.
@@ -99,6 +107,7 @@ class LogController extends Controller
         // Register user via OC API
         try {
             $p_response = $this->polleo_client->request('POST', '/index.php?route=feed/rest_api/register&key=12345', [
+                'verify' => false,
                 'form_params' => $user_data
             ])->getBody();
             $p_response = json_decode($p_response, true);
@@ -137,9 +146,12 @@ class LogController extends Controller
             // Verify telephone number by SMS
             try {
                 $sms_response = $this->sms_client->request('POST', 'pin', [
+                    'headers' => [
+                        'Authorization' => config('services.sms_service.header')
+                    ],
                     'json' => [
                         'applicationId' => config('services.sms_service.app_id'),
-                        'messageId' => config('services.sms_service.app_id'),
+                        'messageId' => config('services.sms_service.msg_id'),
                         'from' => 'InfoSMS',
                         'to' => $user_data['telephone'],
                     ]
@@ -150,12 +162,15 @@ class LogController extends Controller
                 Log::alert($e->getMessage());
             }
 
-            $p_response['sms_response'] = $sms_response;
+            $p_response['userdata']['reference_id'] = $l_response['referenceNumber'];
+            $p_response['userdata']['sms_response'] = $sms_response;
+
+            Log::info($p_response);
 
             // add session user
             User::setUserSessionData($p_response['userdata']);
 
-            return redirect()->route('verify-sms');
+            return redirect()->route('verify');
         }
 
         return back()->with('error', 'Dogodila se greška. Pozovite prodavača!');
@@ -169,9 +184,15 @@ class LogController extends Controller
         // Add some general user data
         $req_data = $request->all();
 
+        Log::info($user);
+        Log::info($req_data);
+
         // Verify PIN sent over SMS
         try {
             $sms_response = $this->sms_client->request('POST', 'pin/' . $user['sms_response']['pinId'] . '/verify', [
+                'headers' => [
+                    'Authorization' => 'App ' . config('services.sms_service.api_key')
+                ],
                 'json' => [
                     'pin' => $req_data['pin'],
                 ]
@@ -182,10 +203,17 @@ class LogController extends Controller
             Log::alert($e->getMessage());
         }
 
-        if ($sms_response['verified']) {
+        // Verify SMS response.
+        if ($sms_response['verified'])
+        {
             return redirect()->route('dashboard');
-        } else {
-            return redirect()->route('verify-sms')->with('error', 'Dogodila se greška. Pozovite prodavača!');
+        }
+        else if ( ! $sms_response['verified'] && $sms_response['pinError'] == 'WRONG_PIN')
+        {
+            return redirect()->route('verify-sms')->with('error', 'Ooops! Krivi PIN... Imate još ' . $sms_response['attemptsRemaining'] . ' pokušaja!');
+        }
+        else {
+            return redirect()->route('register')->with('error', 'Niste se uspjeli registrirati? Obratite se najbližem prodavaču.');
         }
     }
 

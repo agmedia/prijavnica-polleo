@@ -14211,6 +14211,8 @@ var app = new Vue({
         };
     },
     mounted: function mounted() {
+        var _this = this;
+
         setInterval(this.CountDown, 1000);
 
         // Resets interval on every input focus
