@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -27,39 +26,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-
-    /**
-     * Set some basic user session data.
-     *
-     * @param $data
-     */
-    public static function setUserSessionData($data)
-    {
-        $user = $data;
-        $user['address'] = DB::table('oc_address')->where('customer_id', $user['customer_id'])->first();
-        $user = self::setCustomFieldUserData($user);
-
-        session(['user' => $user]);
-    }
-
-
-    /**
-     * Set Custom fields user data.
-     *
-     * @param $data
-     * @return bool
-     */
-    private static function setCustomFieldUserData($data)
-    {
-        if ( ! isset($data['custom_field']))
-            return false;
-
-        $temp = json_decode($data['custom_field'], true);
-
-        $data['birthday'] = $temp['3'];
-        $data['sex'] = $temp['1'] == '1' ? 'M' : 'F';
-
-        return $data;
-    }
 }

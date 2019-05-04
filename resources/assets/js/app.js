@@ -23,7 +23,7 @@ const app = new Vue({
         return {
             socket: '',
             host: 'ws://localhost:5331/serial',
-            timeLeft: 30,
+            timeLeft: 300,
         }
     },
     mounted() {
@@ -33,7 +33,7 @@ const app = new Vue({
         let inputs = document.getElementsByTagName('input');
         for (let i = 0; i < inputs.length; i++) {
             inputs[i].addEventListener('focus', () => {
-                this.timeLeft = 30
+                this.timeLeft = 300
             });
         }
 

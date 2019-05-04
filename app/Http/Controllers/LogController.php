@@ -2,78 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use GuzzleHttp\Exception\RequestException;
+use App\Customer;
+use App\Service\LoyaltyService;
+use App\Service\PolleoService;
+use App\Service\SmsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LogController extends Controller
 {
-    // VIEWS
+    
+    /**
+     * Login View.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function login()
     {
         $backgroundimage = 'images/signup-screen-1.png';
-
+        
         return view('login', compact('backgroundimage'));
-
-
     }
-
+    
+    
+    /**
+     * Register View.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function register()
     {
         $backgroundimage = 'images/signup-screen-1.png';
-
+        
         return view('register', compact('backgroundimage'));
-
     }
-
+    
+    
+    /**
+     * Verify PIN View.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function verify()
     {
         $backgroundimage = 'images/signup-screen-1.png';
-
+        
         return view('verifysms', compact('backgroundimage'));
-
     }
-
-
+    
+    
     /**
      * Try to log user.
      * If successfull redirect them to Dashboard.
      * If not back to login with error status.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function logUser(Request $request)
     {
-        // get user login
-        try {
-            $response = $this->polleo_client->request('POST', '/index.php?route=feed/rest_api/login&key=12345', [
-                'verify' => false,
-                'form_params' => [
-                    'email' => $request->email,
-                    'password' => $request->pass,
-                ]
-            ])->getBody();
-            $response = json_decode($response, true);
-
-        } catch (RequestException $e) {
-            Log::alert($e->getMessage());
+        $polleo_service = new PolleoService();
+        $response       = $polleo_service->login($request);
+        
+        /* @MOCK reference ID mocking @Delete_After */
+        if (isset($response['userdata'])) {
+            $response['userdata']['reference_id'] = '7189e51f-f773-4a3d-b845-86fcf1d1f378';
         }
-
+        
         // if not loged get out
-        if ($response['success'] == 'false') {
-            return back()->with('error', $response['userdata'][0]);
+        if ( ! isset($response['success'])) {
+            return back()->with('error', 'Dogodila se greška! Molimo pokušajte ponovo ili pozovite prodavača.');
+        } elseif ($response['success'] == 'false') {
+            return back()->with('error', 'Ispičavamo se... Molimo pokušajte ponovo!');
         }
         // add address to response user
-        User::setUserSessionData($response['userdata']);
-
+        Customer::setSession($response['userdata']);
+        
         return redirect()->route('dashboard');
     }
-
-
+    
+    
     /**
      * Register User.
      * Validate the user request and
@@ -81,6 +88,7 @@ class LogController extends Controller
      * Create loyalty user and return to dashboard.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -88,147 +96,94 @@ class LogController extends Controller
     {
         $request->validate([
             'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|email',
+            'lastname'  => 'required|string|max:255',
+            'email'     => 'required|email',
             'telephone' => 'required',
-            'address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'zip' => 'required',
-            'birthday' => 'required',
-            'sex' => 'required|string|max:1',
-            'password' => 'required|string|min:6',
+            'address'   => 'required|string',
+            'city'      => 'required|string|max:255',
+            'zip'       => 'required',
+            'birthday'  => 'required',
+            'sex'       => 'required|string|max:1',
+            'password'  => 'required|string|min:6',
         ]);
-
-        // Add some general user data
-        $user_data = $request->all();
-        $user_data['customer_group_id'] = 2;
-        $user_data['country_id'] = 53; // 53 == HR
-
-        // Register user via OC API
-        try {
-            $p_response = $this->polleo_client->request('POST', '/index.php?route=feed/rest_api/register&key=12345', [
-                'verify' => false,
-                'form_params' => $user_data
-            ])->getBody();
-            $p_response = json_decode($p_response, true);
-
-        } catch (RequestException $e) {
-            Log::alert($e->getMessage());
-        }
-
-        /** @ERROR. User već postoji(300) ili nepotpuni podaci(400). */
-        if ($p_response['status'] == 300 || $p_response['status'] == 400) {
-            return back()->with('error', $p_response['userdata']);
-        }
-
-        // Sve OK. Nastavi sa registracijom.
-        if ($p_response['status'] == 200) {
-            // Napravi klijenta u Loyalty-u
-            try {
-                $l_response = $this->loyalty_client->request('POST', 'customer', [
-                    'json' => [
-                        'email' => $user_data['email'],
-                        'name' => $user_data['firstname'],
-                        'surname' => $user_data['lastname'],
-                    ]
-                ])->getBody();
-                $l_response = json_decode($l_response, true);
-
-            } catch (RequestException $e) {
-                Log::alert($e->getMessage());
+        
+        // Add some customer data and Register user on Polleo.
+        $customer       = Customer::setData($request);
+        $polleo_service = new PolleoService();
+        $ps_response    = $polleo_service->register($customer);
+        
+        //Log::debug($ps_response);
+        
+        // Customer created.
+        if (isset($ps_response['status']) && $ps_response['status'] == 200) {
+            // Create loyalty customer
+            $loyalty_service = new LoyaltyService();
+            $ls_response     = $loyalty_service->createCustomer($customer);
+            
+            // Loyalty customer created.
+            if ($ls_response['status'] == 200) {
+                // Send SMS verification PIN.
+                $sms_service  = new SmsService();
+                $sms_response = $sms_service->sendPIN($customer);
+                
+                // Add additional customer data
+                $ps_response['userdata']['reference_id'] = $ls_response['referenceNumber'];
+                $ps_response['userdata']['sms_response'] = $sms_response;
+                
+                // Set customer session.
+                Customer::setSession($ps_response['userdata']);
+                
+                return redirect()->route('verify');
             }
-
-            // Ako je user napravljan i odgovara registriranom, snimi reference-Number u bazu.
-            if ($l_response['email'] == $user_data['email']) {
-                DB::table('oc_customer')->where('email', $l_response['email'])->update(['reference_id' => $l_response['referenceNumber']]);
-            }
-
-            // Verify telephone number by SMS
-            try {
-                $sms_response = $this->sms_client->request('POST', 'pin', [
-                    'headers' => [
-                        'Authorization' => config('services.sms_service.header')
-                    ],
-                    'json' => [
-                        'applicationId' => config('services.sms_service.app_id'),
-                        'messageId' => config('services.sms_service.msg_id'),
-                        'from' => 'InfoSMS',
-                        'to' => $user_data['telephone'],
-                    ]
-                ])->getBody();
-                $sms_response = json_decode($sms_response, true);
-
-            } catch (RequestException $e) {
-                Log::alert($e->getMessage());
-            }
-
-            $p_response['userdata']['reference_id'] = $l_response['referenceNumber'];
-            $p_response['userdata']['sms_response'] = $sms_response;
-
-            Log::info($p_response);
-
-            // add session user
-            User::setUserSessionData($p_response['userdata']);
-
-            return redirect()->route('verify');
         }
-
+        
         return back()->with('error', 'Dogodila se greška. Pozovite prodavača!');
     }
-
-
+    
+    
+    /**
+     * Verify SMS PIN request.
+     * If OK goto dashboard, else attempts remaining.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function verifySMS(Request $request)
     {
-        // Get user from session.
-        $user = $request->session()->get('user');
-        // Add some general user data
-        $req_data = $request->all();
-
-        Log::info($user);
-        Log::info($req_data);
-
         // Verify PIN sent over SMS
-        try {
-            $sms_response = $this->sms_client->request('POST', 'pin/' . $user['sms_response']['pinId'] . '/verify', [
-                'headers' => [
-                    'Authorization' => 'App ' . config('services.sms_service.api_key')
-                ],
-                'json' => [
-                    'pin' => $req_data['pin'],
-                ]
-            ])->getBody();
-            $sms_response = json_decode($sms_response, true);
-
-        } catch (RequestException $e) {
-            Log::alert($e->getMessage());
-        }
-
+        $sms_service  = new SmsService();
+        $sms_response = $sms_service->verifyPIN($request);
+        
         // Verify SMS response.
-        if ($sms_response['verified'])
-        {
+        if ($sms_response['verified']) {
+            // OK.
             return redirect()->route('dashboard');
-        }
-        else if ( ! $sms_response['verified'] && $sms_response['pinError'] == 'WRONG_PIN')
-        {
-            return redirect()->route('verify-sms')->with('error', 'Ooops! Krivi PIN... Imate još ' . $sms_response['attemptsRemaining'] . ' pokušaja!');
-        }
-        else {
-            return redirect()->route('register')->with('error', 'Niste se uspjeli registrirati? Obratite se najbližem prodavaču.');
+        } else {
+            if ( ! $sms_response['verified'] && $sms_response['pinError'] == 'WRONG_PIN') {
+                // Wrong PIN.
+                return redirect()->route('verify-sms')->with('error', 'Ooops! Krivi PIN... Imate još ' . $sms_response['attemptsRemaining'] . ' pokušaja!');
+            } else {
+                // Failed.
+                return redirect()->route('register')->with('error', 'Niste se uspjeli registrirati? Obratite se najbližem prodavaču.');
+            }
         }
     }
-
-
+    
+    
     /**
      * Logout User.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
-        $request->session()->forget('user');
-
+        $request->session()->forget('customer');
+        
         return redirect()->route('home');
     }
-
+    
 }
