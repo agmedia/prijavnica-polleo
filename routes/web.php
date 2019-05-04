@@ -25,6 +25,8 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::post('/edit-user-required-data', 'DashboardController@editUserRequiredData')->name('edit-user-req');
 Route::post('/edit-user-optional-data', 'DashboardController@editUserOptionalData')->name('edit-user-opt');
 
+Route::post('/exp-form', 'DashboardController@editUserOptionalData')->name('exp-form');
+
 Route::post('/log-user', 'LogController@logUser')->name('log-user');
 Route::post('/register-user', 'LogController@registerUser')->name('register-user');
 Route::post('/verify-sms', 'LogController@verifySMS')->name('verify-sms');

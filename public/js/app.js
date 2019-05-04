@@ -14207,7 +14207,7 @@ var app = new Vue({
         return {
             socket: '',
             host: 'ws://localhost:5331/serial',
-            timeLeft: 30
+            timeLeft: 300
         };
     },
     mounted: function mounted() {
@@ -14219,7 +14219,10 @@ var app = new Vue({
         var inputs = document.getElementsByTagName('input');
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].addEventListener('focus', function () {
-                _this.timeLeft = 30;
+                _this.timeLeft = 300;
+            });
+            inputs[i].addEventListener('click', function () {
+                _this.timeLeft = 300;
             });
         }
 

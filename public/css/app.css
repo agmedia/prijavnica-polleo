@@ -11656,7 +11656,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: transparent;
+  background: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -11672,11 +11672,9 @@ html {
 }
 
 .avatar {
- height: 500px;
-position: absolute;
-width: 500px;
-top: 288px;
-right: 258px;
+  height: 200px;
+  position: relative;
+  width: 200px;
 }
 
 .avatar img {
@@ -11689,45 +11687,45 @@ right: 258px;
 
 @-webkit-keyframes cycle-colors {
   0% {
-    border-color: #e8f2f9;
+    border-color: red;
   }
 
   25% {
-    border-color: #e8f2f9;
+    border-color: #80ff00;
   }
 
   50% {
-    border-color: #e8f2f9;
+    border-color: cyan;
   }
 
   75% {
-    border-color: #e8f2f9;
+    border-color: #8000ff;
   }
 
   100% {
-    border-color: #e8f2f9;
+    border-color: red;
   }
 }
 
 @keyframes cycle-colors {
   0% {
-    border-color: #e8f2f9;
+    border-color: red;
   }
 
   25% {
-    border-color: #e8f2f9;
+    border-color: #80ff00;
   }
 
   50% {
-    border-color: #e8f2f9;
+    border-color: cyan;
   }
 
   75% {
-    border-color: #e8f2f9;
+    border-color: #8000ff;
   }
 
   100% {
-    border-color: #e8f2f9;
+    border-color: red;
   }
 }
 
@@ -11749,16 +11747,16 @@ right: 258px;
 
 .avatar::before,
 .avatar::after {
-  -webkit-animation: pulse 1.5s linear infinite;
-          animation: pulse 1.5s linear infinite;
-  border: #e8f2f9 solid 3px;
+  -webkit-animation: pulse 2s linear infinite;
+          animation: pulse 2s linear infinite;
+  border: #afafaf solid 4px;
   border-radius: 9999px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   content: ' ';
   height: 140%;
   left: -20%;
- 
+  opacity: .6;
   position: absolute;
   top: -20%;
   -webkit-transform: scale(0.714);
@@ -11768,13 +11766,13 @@ right: 258px;
 }
 
 .avatar::after {
-  -webkit-animation-delay: .5s;
-          animation-delay: .5s;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
 }
 
 .avatar:hover img {
   cursor: pointer;
-
+  content: url("https://placekitten.com/400/400");
 }
 
 .avatar:hover::before,

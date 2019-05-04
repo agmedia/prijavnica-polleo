@@ -35,6 +35,9 @@ const app = new Vue({
             inputs[i].addEventListener('focus', () => {
                 this.timeLeft = 300
             });
+            inputs[i].addEventListener('click', () => {
+                this.timeLeft = 300
+            });
         }
 
         this.socket = new WebSocket(this.host);

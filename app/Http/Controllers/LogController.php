@@ -112,8 +112,6 @@ class LogController extends Controller
         $polleo_service = new PolleoService();
         $ps_response    = $polleo_service->register($customer);
         
-        //Log::debug($ps_response);
-        
         // Customer created.
         if (isset($ps_response['status']) && $ps_response['status'] == 200) {
             // Create loyalty customer
