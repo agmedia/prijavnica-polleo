@@ -6,7 +6,6 @@ use App\Customer;
 use App\Service\LoyaltyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -19,9 +18,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Set customer.
+        // Set customer
         $customer = $this->setCustomer();
-        // Get customer loyalty points.
+        // Get user loyalty points.
         $loyalty_service = new LoyaltyService();
         $data            = $loyalty_service->getPoints($customer);
         /* @Possible_Response_ERROR - u $data se javlja mogući error u
@@ -37,7 +36,7 @@ class DashboardController extends Controller
          */
         
         if (gettype($data) == 'string') {
-            return redirect()->route('enter')->with('error', 'Login podaci nisu pronađeni... Molimo pokušajte ponovo.');
+            return redirect()->route('enter')->with('error', __('auth.not_found'));
         }
         
         // Assign some additional data rules for the view.
@@ -51,8 +50,8 @@ class DashboardController extends Controller
     
     
     /**
-     * Edit required customer data method.
-     * Validate customer request.
+     * Edit required user data.
+     * Validate user request.
      * Save to database.
      * Save to loyalty if changed.
      * Set new session.
@@ -75,8 +74,8 @@ class DashboardController extends Controller
             'birthday'  => 'required',
             'sex'       => 'required|string|max:1',
         ]);
-    
-        // Set customer.
+        
+        // Set customer
         $customer = $this->setCustomer();
         // Update customer data on Polleo database.
         Customer::updatePolleoDB($request, $customer);
@@ -146,9 +145,9 @@ class DashboardController extends Controller
     private function setCustomer()
     {
         $customer = session()->get('customer');
-        
+    
         if ( ! $customer) {
-            return redirect()->route('enter')->with('error', 'Morate se ponovo logirati na loyalty sustav!');
+            return redirect()->route('enter')->with('error', __('auth.login_again'));
         }
         
         return $customer;

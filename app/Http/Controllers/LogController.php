@@ -7,7 +7,6 @@ use App\Service\LoyaltyService;
 use App\Service\PolleoService;
 use App\Service\SmsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class LogController extends Controller
 {
@@ -63,16 +62,16 @@ class LogController extends Controller
         $polleo_service = new PolleoService();
         $response       = $polleo_service->login($request);
         
-        /* @MOCK reference ID mocking @Delete_After */
+        /* @MOCK reference ID mocking @Delete_In_Production */
         if (isset($response['userdata'])) {
             $response['userdata']['reference_id'] = '7189e51f-f773-4a3d-b845-86fcf1d1f378';
         }
         
         // if not loged get out
         if ( ! isset($response['success'])) {
-            return back()->with('error', 'Dogodila se greška! Molimo pokušajte ponovo ili pozovite prodavača.');
+            return back()->with('error', __('auth.error'));
         } elseif ($response['success'] == 'false') {
-            return back()->with('error', 'Ispičavamo se... Molimo pokušajte ponovo!');
+            return back()->with('error', __('auth.not_found'));
         }
         // add address to response user
         Customer::setSession($response['userdata']);
@@ -135,7 +134,7 @@ class LogController extends Controller
             }
         }
         
-        return back()->with('error', 'Dogodila se greška. Pozovite prodavača!');
+        return back()->with('error', __('auth.error'));
     }
     
     
@@ -161,10 +160,10 @@ class LogController extends Controller
         } else {
             if ( ! $sms_response['verified'] && $sms_response['pinError'] == 'WRONG_PIN') {
                 // Wrong PIN.
-                return redirect()->route('verify-sms')->with('error', 'Ooops! Krivi PIN... Imate još ' . $sms_response['attemptsRemaining'] . ' pokušaja!');
+                return redirect()->route('verify-sms')->with('error', __('auth.pin_attempts', ['attempts' => $sms_response['attemptsRemaining']]));
             } else {
                 // Failed.
-                return redirect()->route('register')->with('error', 'Niste se uspjeli registrirati? Obratite se najbližem prodavaču.');
+                return redirect()->route('register')->with('error', __('auth.failed'));
             }
         }
     }
