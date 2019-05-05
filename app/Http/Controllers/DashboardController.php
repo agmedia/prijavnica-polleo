@@ -6,30 +6,9 @@ use App\Customer;
 use App\Service\LoyaltyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    
-    /**
-     * @var mixed $customer
-     */
-    private $customer;
-    
-    
-    /**
-     * DashboardController constructor.
-     */
-    public function __construct()
-    {
-        $this->customer = \session()->get('customer');
-        
-        if ( ! $this->customer) {
-            return redirect()->route('enter')->with('error', 'Morate se ponovo logirati na loyalty sustav!');
-        }
-    }
-    
     
     /**
      * Show Dashboard.
@@ -39,9 +18,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // Set customer
         $customer = $this->setCustomer();
-        Log::debug($customer);
-        
         // Get user loyalty points.
         $loyalty_service = new LoyaltyService();
         $data            = $loyalty_service->getPoints($customer);
@@ -58,7 +36,7 @@ class DashboardController extends Controller
          */
         
         if (gettype($data) == 'string') {
-            return redirect()->route('enter')->with('error', 'Login podaci nisu pronađeni... Molimo pokušajte ponovo.');
+            return redirect()->route('enter')->with('error', __('auth.not_found'));
         }
         
         // Assign some additional data rules for the view.
@@ -97,14 +75,16 @@ class DashboardController extends Controller
             'sex'       => 'required|string|max:1',
         ]);
         
+        // Set customer
+        $customer = $this->setCustomer();
         // Update customer data on Polleo database.
-        Customer::updatePolleoDB($request, $this->customer);
+        Customer::updatePolleoDB($request, $customer);
         // Update loyalty customer.
         $loyalty_service = new LoyaltyService();
         $loyalty_service->updateCustomer($request);
         
         // Add customer session.
-        $session_customer = DB::table('oc_customer')->where('customer_id', $this->customer['customer_id'])->first();
+        $session_customer = DB::table('oc_customer')->where('customer_id', $customer['customer_id'])->first();
         Customer::setSession(collect($session_customer));
         
         return redirect()->route('dashboard');
@@ -167,7 +147,7 @@ class DashboardController extends Controller
         $customer = session()->get('customer');
     
         if ( ! $customer) {
-            return redirect()->route('enter')->with('error', 'Morate se ponovo logirati na loyalty sustav!');
+            return redirect()->route('enter')->with('error', __('auth.login_again'));
         }
         
         return $customer;
