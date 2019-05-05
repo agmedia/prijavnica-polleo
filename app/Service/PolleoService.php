@@ -36,7 +36,7 @@ class PolleoService extends Model
      *
      * @param Request $request
      *
-     * @return string
+     * @return array|string
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function login(Request $request)

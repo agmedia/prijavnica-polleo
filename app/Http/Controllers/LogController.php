@@ -62,7 +62,7 @@ class LogController extends Controller
         $polleo_service = new PolleoService();
         $response       = $polleo_service->login($request);
         
-        /* @MOCK reference ID mocking @Delete_After */
+        /* @MOCK reference ID mocking @Delete_In_Production */
         if (isset($response['userdata'])) {
             $response['userdata']['reference_id'] = '7189e51f-f773-4a3d-b845-86fcf1d1f378';
         }
@@ -110,8 +110,6 @@ class LogController extends Controller
         $customer       = Customer::setData($request);
         $polleo_service = new PolleoService();
         $ps_response    = $polleo_service->register($customer);
-        
-        //Log::debug($ps_response);
         
         // Customer created.
         if (isset($ps_response['status']) && $ps_response['status'] == 200) {
